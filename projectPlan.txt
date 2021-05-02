@@ -1,0 +1,26 @@
+Backgamon:
+    - game infrastructure:
+        - board graphics
+            V basic plotting
+            - movement animation
+
+        - game rules
+            V move validity checker/+feadback
+
+        - game score
+
+    - players:
+        V random player
+        - human player (UI)
+        - AI player:
+            - NN player:
+                - basic some FC layers
+                - GAN
+    - AI objectives:
+        - Rule learner
+        - understanding layout after apllying a proposed move
+        - Finally: a good player
+
+
+
+log:
