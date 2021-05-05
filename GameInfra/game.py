@@ -1,5 +1,5 @@
 import numpy as np
-from plot_game import plot_game
+from plot_game import plot_game, animate_move, plot_dice
 from throwDice import throwDice
 from apply_move import apply_move
 from RandomPlayer import RandomPlayer
@@ -38,6 +38,7 @@ def run_game(player1, player2, board=None):
         turn = -turn
         dice = throwDice()
         plot_game(board.flatten().tolist())
+        plot_dice(dice)
         illegal_move = [1]
         retry = 5
         while any(illegal_move) and retry:
@@ -52,6 +53,7 @@ def run_game(player1, player2, board=None):
             raise('NoGame')
 
         #drawMoves(moves)
+        animate_move(board_prev_state, moves)
         sleep(0)
         move_log.append(moves)
         turn_count += 1
@@ -72,6 +74,6 @@ winner = sum(end_board) > 0
 
 print(f'Winner: {1 if winner else -1}, turn_count:{turn_count}')
 
-plot_game(end_board, plt_block=True)
+plot_game(end_board, plt_block=11)
 
 
