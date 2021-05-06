@@ -3,6 +3,7 @@ from plot_game import plot_game, animate_move, plot_dice
 from throwDice import throwDice
 from apply_move import apply_move
 from RandomPlayer import RandomPlayer
+from MUIPlayer import MUIPlayer
 import game_scoring
 
 def board_init():  # initialize game board
@@ -54,7 +55,7 @@ def run_game(player1, player2, board=None):
 
         #drawMoves(moves)
         animate_move(board_prev_state, moves)
-        sleep(0)
+        # sleep(0)
         move_log.append(moves)
         turn_count += 1
         plot_game(board.flatten().tolist())
@@ -63,12 +64,12 @@ def run_game(player1, player2, board=None):
     return move_log, turn_count, board
 
 
-
 board = board_init()
 plot_game(board.flatten().tolist())
 
 player = RandomPlayer('RandomPlayer')
-move_log, turn_count, end_board = run_game(player, player, board)
+human_player = MUIPlayer()
+move_log, turn_count, end_board = run_game(player, human_player, board)
 
 winner = sum(end_board) > 0
 

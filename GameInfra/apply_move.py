@@ -12,6 +12,9 @@ def apply_move(board, turn, dice, moves):
     destinations = [sum(m) if (m[0] is not None) else None for m in moves]
     illegalMove = np.zeros(len(dice), np.int8, 'F')
 
+    if len(moves) != len(dice):
+        illegalMove |= 128  # structural error, all dice must be addressed
+
     for ii in range(len(moves)):  # iterate over moves
         playersSlots = turn * board > 0
         playersSlotsIdx = playersSlots.nonzero()[0]

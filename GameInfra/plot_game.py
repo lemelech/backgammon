@@ -32,8 +32,9 @@ def dice_init():
     sz = dice_img.shape
     dd = np.ceil(sz[:2]/np.array([3,6]) * 1.04).astype(int)
     dice_imgs = []
+    r = 0  # 0
     for i in range(6):
-        dice_imgs.append(dice_img[10:dd[0]-70, 10+i*dd[1]:(i+1)*dd[1]-70, :])
+        dice_imgs.append(dice_img[10+r*dd[0]:(r+1)*dd[0]-70, 10+i*dd[1]:(i+1)*dd[1]-70, :])
         # plt.imshow(dice_imgs[i])
     return dice_imgs
 
@@ -147,6 +148,7 @@ def plot_dice(dice):
     for im in ax3.images:
         im.remove()
     ax3.imshow(dice_imgs[dice[1]-1])
+    plt.show(block=False)
 
 
 

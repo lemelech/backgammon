@@ -2,7 +2,8 @@ Backgamon:
     - game infrastructure:
         - board graphics
             V basic plotting
-            - movement animation
+            V movement animation
+            V dice presented
 
         - game rules
             V move validity checker/+feadback
@@ -10,8 +11,8 @@ Backgamon:
         - game score
 
     - players:
-        V random player
-        - human player (UI)
+        V random player(obeyes rules though)
+        - human player (UI) *
         - AI player:
             - NN player:
                 - basic some FC layers
@@ -24,3 +25,5 @@ Backgamon:
 
 
 log:
+04-05/05 :
+  - movement animation, dice presented,
