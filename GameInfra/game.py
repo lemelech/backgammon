@@ -1,5 +1,5 @@
 import numpy as np
-from plot_game import plot_game, animate_move, plot_dice
+from plot_game import plot_game, animate_move, plot_dice, show_whos_turn
 from throwDice import throwDice
 from apply_move import apply_move
 from RandomPlayer import RandomPlayer
@@ -44,6 +44,7 @@ def run_game(player1, player2, board=None):
         retry = 5
         while any(illegal_move) and retry:
             board_prev_state = board.copy()
+            show_whos_turn(turn)
             if (turn > 0):
                 moves = player1.offer_move(board, turn, dice)
             else:

@@ -16,10 +16,13 @@ F = plt.figure()
 ax1 = plt.subplot2grid((3,5), (0,0), colspan=4, rowspan=3)
 bkgrnd_plot = ax1.imshow(img_board)
 
-ax2 = plt.subplot2grid((3,5), (0,4))
-ax2.axis('off')
-ax3 = plt.subplot2grid((3,5), (1,4))
-ax3.axis('off')
+ax_die1 = plt.subplot2grid((3, 5), (0, 4))
+ax_die1.axis('off')
+ax_die2 = plt.subplot2grid((3, 5), (1, 4))
+ax_die2.axis('off')
+ax_turn = plt.subplot2grid((3, 5), (2, 4))
+ax_turn.axis('off')
+ax_turn.text(-0.02, -0.027, 'Turn')
 
 def sct_clr(ax):
     for ob in ax.get_children():
@@ -142,12 +145,18 @@ def animate_move(board, moves):
 
 
 def plot_dice(dice):
-    for im in ax2.images:
+    for im in ax_die1.images:
         im.remove()
-    ax2.imshow(dice_imgs[dice[0]-1])
-    for im in ax3.images:
+    ax_die1.imshow(dice_imgs[dice[0] - 1])
+    for im in ax_die2.images:
         im.remove()
-    ax3.imshow(dice_imgs[dice[1]-1])
+    ax_die2.imshow(dice_imgs[dice[1] - 1])
+    plt.show(block=False)
+
+def show_whos_turn(sign):
+    sct_clr(ax_turn)
+    ax_turn.scatter(0, 0, 400, (1 if sign == 1 else 0), vmin=0)
+
     plt.show(block=False)
 
 
