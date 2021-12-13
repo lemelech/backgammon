@@ -26,6 +26,27 @@ def risk(board, turn):
     valid_steps = threat_combis[0] - threat_combis[1]
     threat_probabilities = prob_all[valid_steps]  # initial probabilities, without considering blockages
 
+    idx = threat_probabilities > 0
+    threat_combis = threat_combis[:, idx]
+    valid_steps = valid_steps[idx]
+    threat_probabilities = threat_probabilities[idx]
+
+def max_loss_dice_mov(board, dice, negative_vulnerbl, positive_positions, threat_combis, valid_steps):
+    board = np.array(board)
+    dice_sum = np.cumsum(dice)
+    dice_and_sums = np.append(dice, dice_sum)
+    viable_threats_idx = np.in1d(valid_steps, dice_and_sums)
+    threat_combis = threat_combis.copy()[:, viable_threats_idx]
+    valid_steps = valid_steps.copy()[viable_threats_idx]
+    if len(valid_steps) == 0:
+        return 0  # no loss
+    elif len(valid_steps) == 1:
+        #! need 2 make sure this is a valid move
+        return threat_combis[0, 0]  # only 1 option
+    else:  # figure out max loss
+
+
+
 
 
 
