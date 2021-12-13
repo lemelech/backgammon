@@ -65,17 +65,18 @@ def run_game(player1, player2, board=None):
     return move_log, turn_count, board
 
 
-board = board_init()
-plot_game(board.flatten().tolist())
+if __name__ == '__main__':
+    board = board_init()
+    plot_game(board.flatten().tolist())
 
-player = RandomPlayer('RandomPlayer')
-human_player = MUIPlayer()
-move_log, turn_count, end_board = run_game(player, human_player, board)
+    player = RandomPlayer('RandomPlayer')
+    human_player = MUIPlayer()
+    move_log, turn_count, end_board = run_game(player, human_player, board)
 
-winner = sum(end_board) > 0
+    winner = sum(end_board) > 0
 
-print(f'Winner: {1 if winner else -1}, turn_count:{turn_count}')
+    print(f'Winner: {1 if winner else -1}, turn_count:{turn_count}')
 
-plot_game(end_board, plt_block=11)
+    plot_game(end_board, plt_block=11)
 
 
