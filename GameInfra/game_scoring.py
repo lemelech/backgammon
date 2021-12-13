@@ -44,7 +44,7 @@ def max_loss_dice_mov(board, dice, negative_vulnerbl, positive_positions, threat
         #! need 2 make sure this is a valid move
         return threat_combis[0, 0]  # only 1 option
     else:  # figure out max loss
-
+        raise NotImplementedError
 
 
 
