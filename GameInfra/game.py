@@ -2,11 +2,17 @@ import numpy as np
 from plot_game import plot_game, animate_move, plot_dice, show_whos_turn
 from throwDice import throwDice
 from apply_move import apply_move
-from RandomPlayer import RandomPlayer
+from RandomPlayer import RandomPlayer, BestRandomNPlayer
 from MUIPlayer import MUIPlayer
 import game_scoring
 
 def board_init():  # initialize game board
+    """ board is a 26 element array
+     each slot indicates the amount of occupying pieces, either positive or negative
+     the first [0] and last [25] slots are the jail slots, and [1:24] are the main game board
+     positive pieces move from 1 to 24, and are jailed in 0,
+     and negative pieces move from 24 to 1, and are jailed at 25"""
+
     board = np.zeros(26, np.int8, 'F')
     board[1] = 2
     board[24] = -2
@@ -60,7 +66,7 @@ def run_game(player1, player2, board=None):
         move_log.append(moves)
         turn_count += 1
         plot_game(board.flatten().tolist())
-        score = game_scoring.position_sum(board)
+        score = game_scoring.position_sum(board, turn)
 
     return move_log, turn_count, board
 
@@ -69,8 +75,8 @@ if __name__ == '__main__':
     board = board_init()
     plot_game(board.flatten().tolist())
 
-    player = RandomPlayer('RandomPlayer')
-    human_player = MUIPlayer()
+    player = BestRandomNPlayer('BestRandomNPlayer')  #RandomPlayer('RandomPlayer')
+    human_player = RandomPlayer('RandomPlayer') # MUIPlayer()
     move_log, turn_count, end_board = run_game(player, human_player, board)
 
     winner = sum(end_board) > 0

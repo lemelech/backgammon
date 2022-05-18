@@ -1,6 +1,7 @@
 from BkgPlayer import BkgPlayer
 import numpy as np
 from apply_move import apply_move
+import game_scoring as gs
 
 
 class RandomPlayer(BkgPlayer):
@@ -70,4 +71,24 @@ class RandomPlayer(BkgPlayer):
                 dice = []
             my_slots = (board * turn) > 0
             my_slots_idx = my_slots.nonzero()[0]
+
+        for d in dice:#if game has ended but some dice left
+            moves.append([None, turn * d])
         return moves
+
+
+class BestRandomNPlayer(BkgPlayer):
+    """performs best of n randomly sampled moves of RandomPlayer"""
+    def __init__(self, player_name, n=3):
+        # super(RandomPlayer, self).__init__(player_name)
+        self.name = player_name
+        self.n = n
+        self.PlayerType = 'randPlayer'+str(n)
+        self.RandomPlayer = RandomPlayer(player_name)
+
+    def offer_move(self, board, turn, dice):
+        offer_moves = [self.RandomPlayer.offer_move(board, turn, dice) for _ in range(self.n)]
+        # boards = [b for b,_ in [apply_move(board, turn, dice, om) for om in offer_moves]]
+        # scores = [gs.total_position_score(b, turn) for b in boards]
+        scores = [gs.total_position_score(b, turn) for b,_ in [apply_move(board, turn, dice, om) for om in offer_moves]]
+        return offer_moves[np.argmax(scores)]

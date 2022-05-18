@@ -1,0 +1,5 @@
+# git ignore these files:
+**/.idea/**
+**/*.xml
+githash.txt
+*.pkl
