@@ -1,5 +1,5 @@
 import numpy as np
-from plot_game import plot_game, animate_move, plot_dice, show_whos_turn
+from plot_game import plot_game, animate_move, plot_dice, show_whos_turn, counts_histogram
 from throwDice import throwDice
 from apply_move import apply_move
 from RandomPlayer import RandomPlayer, BestRandomNPlayer
@@ -29,9 +29,8 @@ def game_is_on(board):  # check if game is not over
     return (board > 0).any() and (board < 0).any()
 
 
-def run_game(player1, player2, board=None):
-    from time import sleep
-
+def run_game(player1, player2, board=None, graphic_mode='all'):
+    """main game loop"""
     np.random.seed()
 
     # Determine who starts
@@ -44,13 +43,15 @@ def run_game(player1, player2, board=None):
     while game_is_on(board):
         turn = -turn
         dice = throwDice()
-        plot_game(board.flatten().tolist())
-        plot_dice(dice)
+        if graphic_mode in ['all', 'state']:
+            plot_game(board.flatten().tolist())
+            plot_dice(dice)
         illegal_move = [1]
         retry = 5
         while any(illegal_move) and retry:
             board_prev_state = board.copy()
-            show_whos_turn(turn)
+            if graphic_mode in ['all', 'state']:
+                show_whos_turn(turn)
             if (turn > 0):
                 moves = player1.offer_move(board, turn, dice)
             else:
@@ -60,29 +61,43 @@ def run_game(player1, player2, board=None):
         if retry == 0 and any(illegal_move):
             raise('NoGame')
 
-        #drawMoves(moves)
-        animate_move(board_prev_state, moves)
-        # sleep(0)
+        if graphic_mode in ['all']:
+            animate_move(board_prev_state, moves)
         move_log.append(moves)
         turn_count += 1
-        plot_game(board.flatten().tolist())
+        if graphic_mode in ['all', 'state']:
+            plot_game(board.flatten().tolist())
         score = game_scoring.position_sum(board, turn)
-
+    if graphic_mode in ['all', 'state', 'end']:
+        plot_game(board, plt_block=11)
     return move_log, turn_count, board
 
 
+def run_n_games(player1, player2, board=None, graphic_mode=None, n_games=100):
+    """game statistics"""
+    games_log = []
+    turn_counts_log = []
+
+    for g in range(n_games):
+        move_log, turn_count, end_board = run_game(player1, player2, board, graphic_mode)
+
+        winner = sum(end_board) < 0
+        # print(f'Winner: {player1.name if winner else player2.name}, turn_count:{turn_count}')
+
+        games_log.append(int(winner))
+        turn_counts_log.append(turn_count)
+
+    print(f'Player1 {np.array(games_log).sum()} : {n_games - np.array(games_log).sum()} Player2')
+    counts_histogram(np.array(turn_counts_log), np.array(games_log), player1.PlayerType, player2.PlayerType)
+    return games_log, turn_counts_log
+
+
 if __name__ == '__main__':
-    board = board_init()
-    plot_game(board.flatten().tolist())
 
-    player = BestRandomNPlayer('BestRandomNPlayer')  #RandomPlayer('RandomPlayer')
-    human_player = RandomPlayer('RandomPlayer') # MUIPlayer()
-    move_log, turn_count, end_board = run_game(player, human_player, board)
+    # player1 = MUIPlayer() # human_player
+    # player1 = RandomPlayer('RandomPlayer')
+    player1 = BestRandomNPlayer('BestRandomNPlayer', n=3)
+    player2 = BestRandomNPlayer('BestRandomNPlayer', n=5)
 
-    winner = sum(end_board) > 0
-
-    print(f'Winner: {1 if winner else -1}, turn_count:{turn_count}')
-
-    plot_game(end_board, plt_block=11)
-
-
+    wins_log, turn_counts_log = run_n_games(player1, player2, n_games=100)
+    # move_log, turn_count, end_board = run_game(player1, player2, None, graphic_mode=None)

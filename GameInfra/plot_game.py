@@ -5,12 +5,12 @@ matplotlib.get_backend()
 import numpy as np
 from apply_move import apply_move
 
+
 dx = 36
 dy = 38
 midP = 250
 peice_size = 200
 img_board = mpimg.imread('GB-5-2.jpg')
-
 
 F = plt.figure()
 ax1 = plt.subplot2grid((3,5), (0,0), colspan=4, rowspan=3)
@@ -23,6 +23,7 @@ ax_die2.axis('off')
 ax_turn = plt.subplot2grid((3, 5), (2, 4))
 ax_turn.axis('off')
 ax_turn.text(-0.02, -0.027, 'Turn')
+
 
 def sct_clr(ax):
     for ob in ax.get_children():
@@ -153,6 +154,7 @@ def plot_dice(dice):
     ax_die2.imshow(dice_imgs[dice[1] - 1])
     plt.show(block=False)
 
+
 def show_whos_turn(sign):
     sct_clr(ax_turn)
     ax_turn.scatter(0, 0, 400, (1 if sign == 1 else 0), vmin=0)
@@ -160,11 +162,27 @@ def show_whos_turn(sign):
     plt.show(block=False)
 
 
-
 def dice_image():
     pass
 
 
+def counts_histogram(rounds_log, game_log, name1=None, name2=None):
+    plt.figure()
+    plt.suptitle('Turn count histograms')
+    plt.subplot(3, 1, 1)
+    plt.hist(rounds_log, range(30, 150, 2))
+
+    plt.subplot(3, 1, 2).set_title(name1)
+    p1_turns = rounds_log[game_log > 0]
+    plt.hist(p1_turns, range(38, 142, 2))
+    print(f'player1 {name1} wins turn count Mean:{p1_turns.mean()} Median:{np.median(p1_turns)}')
+
+    plt.subplot(3, 1, 3).set_title(name2)
+    p2_turns = rounds_log[game_log < 1]
+    plt.hist(p2_turns, range(38, 142, 2))
+    print(f'player2 {name2} wins turn count Mean:{p2_turns.mean()} Median:{np.median(p2_turns)}')
+
+    plt.show()
 
 
     ''' from PIL import Image
